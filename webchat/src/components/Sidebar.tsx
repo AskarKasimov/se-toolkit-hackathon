@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageSquare, Plus, Zap, Heart } from 'lucide-react';
+import { MessageSquare, Plus, Zap } from 'lucide-react';
 import { ChatSession } from '../lib/types';
 
 interface SidebarProps {
@@ -7,6 +7,7 @@ interface SidebarProps {
   activeSessionId: string | null;
   onSelectSession: (id: string) => void;
   onNewChat: () => void;
+  onScenarioClick: (scenario: string) => void;
 }
 
 const scenarios = [
@@ -16,7 +17,7 @@ const scenarios = [
   "Как узнать волю Божию?"
 ];
 
-export function Sidebar({ sessions, activeSessionId, onSelectSession, onNewChat }: SidebarProps) {
+export function Sidebar({ sessions, activeSessionId, onSelectSession, onNewChat, onScenarioClick }: SidebarProps) {
   return (
     <div className="w-80 bg-slate-50 border-r border-slate-200 h-full flex flex-col">
       <div className="p-4 flex-shrink-0">
@@ -62,30 +63,12 @@ export function Sidebar({ sessions, activeSessionId, onSelectSession, onNewChat 
             {scenarios.map((scenario, idx) => (
               <button
                 key={idx}
-                className="w-full text-left p-3 rounded-lg bg-white border border-slate-200 hover:border-indigo-300 hover:shadow-sm text-sm text-slate-700 transition-all"
+                onClick={() => onScenarioClick(scenario)}
+                className="w-full text-left p-3 rounded-lg bg-white border border-slate-200 hover:border-indigo-300 hover:shadow-sm text-sm text-slate-700 transition-all font-medium"
               >
                 {scenario}
               </button>
             ))}
-          </div>
-        </div>
-
-        <div className="mt-8 mb-6">
-          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1">
-            <Heart size={14} /> Состояние души
-          </h3>
-          <div className="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
-            <p className="text-sm text-slate-600 mb-2">На что откликается ваше сердце сегодня?</p>
-            <div className="flex justify-between gap-1">
-              {['😔', '😐', '😌', '😊'].map((emoji, idx) => (
-                <button
-                  key={idx}
-                  className="text-xl hover:scale-110 transition-transform bg-slate-50 p-2 rounded-full hover:bg-slate-100"
-                >
-                  {emoji}
-                </button>
-              ))}
-            </div>
           </div>
         </div>
       </div>
