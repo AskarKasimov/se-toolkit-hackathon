@@ -1,7 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Mic, Square, Loader2, Bot, User } from 'lucide-react';
+import { Send, Mic, Square, Loader2, User } from 'lucide-react';
 import { Message } from '../lib/types';
 import ReactMarkdown from 'react-markdown';
+
+const OrthodoxCross = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M12 2v20" />
+    <path d="M6 8h12" />
+    <path d="M10 4h4" />
+    <path d="M9 14l6 4" />
+  </svg>
+);
 
 interface ChatAreaProps {
   messages: Message[];
@@ -33,7 +42,7 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
         {messages.length === 0 ? (
           <div className="h-full flex items-center justify-center flex-col text-center px-4">
             <div className="bg-indigo-100 p-4 rounded-full mb-4">
-              <Bot className="w-12 h-12 text-indigo-600" />
+              <OrthodoxCross className="w-12 h-12 text-indigo-600" />
             </div>
             <h2 className="text-2xl font-bold text-slate-800 mb-2">Православный собеседник</h2>
             <p className="text-slate-500 max-w-md">Здесь вы можете задать вопросы о православной вере, Евангелии и духовной жизни. Отправьте текстовое или голосовое сообщение.</p>
@@ -43,7 +52,7 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
             <div key={message.id} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`flex gap-4 max-w-3xl ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                 <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md ${message.role === 'user' ? 'bg-indigo-600' : 'bg-emerald-600'}`}>
-                  {message.role === 'user' ? <User className="text-white w-6 h-6" /> : <Bot className="text-white w-6 h-6" />}
+                  {message.role === 'user' ? <User className="text-white w-6 h-6" /> : <OrthodoxCross className="text-white w-6 h-6" />}
                 </div>
                 <div className={`flex flex-col ${message.role === 'user' ? 'items-end' : 'items-start'}`}>
                   <div className={`p-4 rounded-2xl shadow-sm border ${message.role === 'user' ? 'bg-indigo-50 border-indigo-100 rounded-tr-sm text-slate-800' : 'bg-white border-slate-200 rounded-tl-sm text-slate-800 prose prose-sm'}`}>
@@ -68,7 +77,7 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
           <div className="flex justify-start">
             <div className="flex gap-4 max-w-3xl flex-row">
               <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md bg-emerald-600">
-                <Bot className="text-white w-6 h-6" />
+                <OrthodoxCross className="text-white w-6 h-6" />
               </div>
               <div className="flex flex-col items-start">
                 <div className="p-4 rounded-2xl shadow-sm border bg-white border-slate-200 rounded-tl-sm text-slate-800 flex items-center gap-3">
