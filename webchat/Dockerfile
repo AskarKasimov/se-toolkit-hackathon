@@ -1,6 +1,6 @@
 # Use the official Next.js Docker implementation pattern
 # Switching from alpine to slim (Debian-based) to avoid DNS and libc-compat issues
-FROM node:20-slim AS base
+FROM node:25-slim AS base
 
 # Install dependencies only when needed
 FROM base AS deps
