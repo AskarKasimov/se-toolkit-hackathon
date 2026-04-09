@@ -38,7 +38,7 @@ export async function POST(req: Request) {
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "qwen-code", // placeholder model
+        model: "coder-model",
         messages: [
           {
             role: "system",
