@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   webchat:
@@ -12,7 +12,48 @@ services:
       - .env.secret
     restart: unless-stopped
     networks:
-      - lms-network
+      - orthodox-network
+
+  qwen-code-api:
+    build: ./qwen-code-api-ts
+    ports:
+      - "${HOST_ADDRESS:-127.0.0.1}:${QWEN_CODE_API_HOST_PORT:-8080}:${PORT:-8080}"
+    volumes:
+      - ~/.qwen:/mnt/qwen-creds:ro
+    env_file:
+      - .env.secret
+    environment:
+      - NODE_ENV=production
+      - PORT=${PORT:-8080}
+      - HOST=${CONTAINER_ADDRESS:-0.0.0.0}
+      - DEBUG_LOG=${DEBUG_LOG:-false}
+      - LOG_FILE_LIMIT=${LOG_FILE_LIMIT:-20}
+      - STREAM=${STREAM:-false}
+      - DEFAULT_ACCOUNT=${DEFAULT_ACCOUNT:-}
+      - QWEN_CODE_AUTH_USE=${QWEN_CODE_AUTH_USE:-true}
+      - QWEN_CODE_API_KEY=${QWEN_CODE_API_KEY:-}
+    networks:
+      - orthodox-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - "-e"
+        - |
+          const req = require('http').request({
+            hostname: 'localhost',
+            port: '${PORT:-8080}',
+            path: '/health',
+            method: 'GET',
+            headers: { 'X-API-Key': '${QWEN_CODE_API_KEY:-}' }
+          }, (res) => { process.exit(res.statusCode === 200 ? 0 : 1) });
+          req.on('error', () => process.exit(1));
+          req.end();
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   whisper:
     image: ghcr.io/speaches-ai/speaches:latest-cpu
@@ -26,12 +67,12 @@ services:
       - whisper-models:/models
     restart: unless-stopped
     networks:
-      - lms-network
+      - orthodox-network
 
 volumes:
   whisper-models:
 
 networks:
-  lms-network:
-    name: lms-network
+  orthodox-network:
+    name: orthodox-network
     attachable: true
