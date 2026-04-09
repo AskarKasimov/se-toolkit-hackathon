@@ -142,14 +142,13 @@ export default function Home() {
       };
 
       mediaRecorder.onstop = () => {
-        // Here we could use audioBlob for STT
-        // const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        
-        // Mocking STT response visually for now
-        const simulatedTranscription = "I have been feeling quite restless lately. How can I find center?";
-        handleSendMessage(simulatedTranscription, true);
-        
+        // Stop all tracks to release the microphone completely
         stream.getTracks().forEach(track => track.stop());
+        
+        // Mocking STT response for now
+        const transcribedText = "Я чувствую беспокойство. Как мне найти мир в душе?";
+        handleSendMessage(transcribedText, true);
+        setIsRecording(false);
       };
 
       mediaRecorder.start();
@@ -161,10 +160,11 @@ export default function Home() {
   };
 
   const handleStopRecording = () => {
-    setIsRecording(false);
-    // Mock transcribed text
-    const transcribedText = "Я чувствую беспокойство. Как мне найти мир в душе?";
-    handleSendMessage(transcribedText, true);
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+    } else {
+      setIsRecording(false);
+    }
   };
 
   return (
