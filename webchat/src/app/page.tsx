@@ -9,7 +9,8 @@ export default function Home() {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
+  const [isThinking, setIsThinking] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -86,7 +87,7 @@ export default function Home() {
       );
     }
 
-    setIsLoading(true);
+    setIsThinking(true);
 
     try {
       // Create message array for the API
@@ -124,7 +125,7 @@ export default function Home() {
     } catch (error) {
       console.error("Error sending message:", error);
     } finally {
-      setIsLoading(false);
+      setIsThinking(false);
     }
   };
 
@@ -148,7 +149,7 @@ export default function Home() {
 
         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         
-        setIsLoading(true);
+        setIsTranscribing(true);
         try {
           const formData = new FormData();
           formData.append('file', audioBlob, 'voice-message.webm');
@@ -174,7 +175,7 @@ export default function Home() {
           console.error('STT error:', error);
           handleSendMessage("Извините, не удалось распознать голос. Попробуйте еще раз или напишите текстом.", true);
         } finally {
-          setIsLoading(false);
+          setIsTranscribing(false);
         }
       };
 
@@ -211,7 +212,8 @@ export default function Home() {
       <ChatArea
         messages={activeSession.messages || []}
         isRecording={isRecording}
-        isLoading={isLoading}
+        isTranscribing={isTranscribing}
+        isThinking={isThinking}
         onSendMessage={handleSendMessage}
         onStartRecording={handleStartRecording}
         onStopRecording={handleStopRecording}

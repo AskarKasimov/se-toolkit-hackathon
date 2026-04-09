@@ -15,14 +15,15 @@ const OrthodoxCross = ({ className }: { className?: string }) => (
 interface ChatAreaProps {
   messages: Message[];
   isRecording: boolean;
-  isLoading: boolean;
+  isTranscribing: boolean;
+  isThinking: boolean;
   onSendMessage: (content: string, isVoice: boolean) => void;
   onStartRecording: () => void;
   onStopRecording: () => void;
   onToggleSidebar: () => void;
 }
 
-export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onStartRecording, onStopRecording, onToggleSidebar }: ChatAreaProps) {
+export function ChatArea({ messages, isRecording, isTranscribing, isThinking, onSendMessage, onStartRecording, onStopRecording, onToggleSidebar }: ChatAreaProps) {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -42,11 +43,11 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isLoading]);
+  }, [messages, isTranscribing, isThinking]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isRecording) return;
+    if (!input.trim() || isRecording || isTranscribing || isThinking) return;
     onSendMessage(input.trim(), false);
     setInput('');
   };
@@ -103,7 +104,22 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
             </div>
           ))
         )}
-        {isLoading && (
+        {isTranscribing && (
+          <div className="flex justify-end">
+            <div className="flex gap-4 max-w-3xl flex-row-reverse">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md bg-indigo-600">
+                <User className="text-white w-6 h-6" />
+              </div>
+              <div className="flex flex-col items-end">
+                <div className="p-4 rounded-2xl shadow-sm border bg-indigo-50 border-indigo-100 rounded-tr-sm text-slate-800 flex items-center gap-3">
+                  <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
+                  <span className="text-sm font-medium text-slate-600">Распознаю голос...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {isThinking && (
           <div className="flex justify-start">
             <div className="flex gap-4 max-w-3xl flex-row">
               <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md bg-emerald-600">
@@ -141,7 +157,7 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
             />
             <button
               type="submit"
-              disabled={!input.trim() || isRecording || isLoading}
+              disabled={!input.trim() || isRecording || isTranscribing || isThinking}
               className="absolute right-[10px] bottom-[11px] p-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:bg-slate-300 transition-colors shadow-sm flex items-center justify-center h-[34px] w-[34px]"
               aria-label="Send message"
             >
