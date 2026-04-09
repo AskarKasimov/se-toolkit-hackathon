@@ -14,11 +14,11 @@ export async function POST(req: Request) {
     if (!apiKey) {
       // Return a simulated spiritually grounded response if no API key is present
       const mockResponses = [
-        "In the quiet of your mind, you will find the answers you seek. Breathe deeply and trust the journey.",
-        "Your feelings are like clouds passing over the mountain of your soul. Let them drift, remaining rooted in peace.",
-        "When the path is unclear, take a step softly. Wisdom reveals itself not in rushing, but in being present.",
-        "You are exactly where you need to be. Embrace this moment with compassion.",
-        "Seek the light within; even the smallest spark can illuminate the darkest night."
+        "«Придите ко Мне все труждающиеся и обремененные, и Я успокою вас» (Мф. 11:28). Не отчаивайтесь, доверьте свои тревоги Господу.",
+        "Святые Отцы учат, что гордость и печаль часто ходят рядом. Как говорил преподобный Серафим Саровский: «Стяжи дух мирен, и тогда тысяча душ спасется около тебя».",
+        "В любой непонятной ситуации самое верное — помолиться: «Господи, Иисусе Христе, Сыне Божий, помилуй мя грешнаго» / «грешную».",
+        "Для чтения на каждый день лучше всего подходит Евангелие. Откройте любую главу — и Бог обязательно ответит на ваши сокровенные мысли.",
+        "Не будем забывать, что всё посылается нам либо по воле Божией, либо по Его попущению для нашего укрепления."
       ];
       const randomResponse = mockResponses[Math.floor(Math.random() * mockResponses.length)];
       
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       
       return NextResponse.json({
         role: "assistant",
-        content: `(Simulated) ${randomResponse}`
+        content: `(Пробный ответ) ${randomResponse}`
       });
     }
 
@@ -38,11 +38,11 @@ export async function POST(req: Request) {
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "coder-model",
+        model: "qwen-code", // placeholder model
         messages: [
           {
             role: "system",
-            content: "You are a spiritually grounded conversational assistant. Respond thoughtfully, with deep empathy and spiritual wisdom."
+            content: "Ты — православный собеседник и наставник. Отвечай на вопросы пользователя с любовью, глубоким духовным рассуждением и состраданием, опираясь строго на Священное Писание (особенно Евангелие), учение Святых Отцов и традиции Православной Церкви. Избегай эзотерики и абстрактной духовности."
           },
           ...messages
         ],

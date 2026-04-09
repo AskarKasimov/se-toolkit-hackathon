@@ -18,7 +18,7 @@ export default function Home() {
   // Derivé current session and messages
   const activeSession = sessions.find((s) => s.id === activeSessionId) || {
     id: 'new',
-    title: 'New Journey',
+    title: 'Новая беседа',
     preview: '',
     date: new Date().toISOString(),
     messages: []
@@ -88,7 +88,7 @@ export default function Home() {
       const assistantMessage: Message = {
         id: generateId(),
         role: data.role || 'assistant',
-        content: data.content || 'I am sorry, my connection to the spiritual realm is clouded right now.',
+        content: data.content || 'Простите, сейчас я не могу ответить. Попробуйте еще раз с Божьей помощью.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
 
@@ -139,10 +139,10 @@ export default function Home() {
   };
 
   const handleStopRecording = () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-    }
+    setIsRecording(false);
+    // Mock transcribed text
+    const transcribedText = "Я чувствую беспокойство. Как мне найти мир в душе?";
+    handleSendMessage(transcribedText, true);
   };
 
   return (

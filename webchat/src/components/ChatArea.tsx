@@ -31,12 +31,12 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
     <div className="flex-1 flex flex-col h-full bg-white relative">
       <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6">
         {messages.length === 0 ? (
-          <div className="h-full flex items-center justify-center flex-col text-centerpx-4">
+          <div className="h-full flex items-center justify-center flex-col text-center px-4">
             <div className="bg-indigo-100 p-4 rounded-full mb-4">
               <Bot className="w-12 h-12 text-indigo-600" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-800 mb-2">Welcome to Spiritual Guide</h2>
-            <p className="text-slate-500 max-w-md">I am here to listen, guide, and offer wisdom. Share your thoughts via text or voice message.</p>
+            <h2 className="text-2xl font-bold text-slate-800 mb-2">Православный собеседник</h2>
+            <p className="text-slate-500 max-w-md">Здесь вы можете задать вопросы о православной вере, Евангелии и духовной жизни. Отправьте текстовое или голосовое сообщение.</p>
           </div>
         ) : (
           messages.map((message) => (
@@ -49,7 +49,7 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
                   <div className={`p-4 rounded-2xl shadow-sm border ${message.role === 'user' ? 'bg-indigo-50 border-indigo-100 rounded-tr-sm text-slate-800' : 'bg-white border-slate-200 rounded-tl-sm text-slate-800 prose prose-sm'}`}>
                     {message.isVoice && (
                       <div className="flex items-center gap-2 mb-2 text-indigo-600 bg-indigo-100/50 px-3 py-1 rounded-full text-xs font-medium w-fit">
-                        <Mic size={14} /> Voice Message Converted
+                        <Mic size={14} /> Переведено из голоса
                       </div>
                     )}
                     {message.role === 'assistant' ? (
@@ -73,7 +73,7 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
               <div className="flex flex-col items-start">
                 <div className="p-4 rounded-2xl shadow-sm border bg-white border-slate-200 rounded-tl-sm text-slate-800 flex items-center gap-3">
                   <Loader2 className="w-5 h-5 animate-spin text-emerald-600" />
-                  <span className="text-sm font-medium text-slate-600">Meditating on your words...</span>
+                  <span className="text-sm font-medium text-slate-600">Обращаюсь к Писанию...</span>
                 </div>
               </div>
             </div>
@@ -88,7 +88,7 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message here..."
+              placeholder="Напишите сообщение..."
               className="w-full bg-slate-50 border border-slate-300 rounded-2xl px-5 flex items-center py-4 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none h-14 min-h-[56px] max-h-32 shadow-inner pr-14 transition-all"
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
