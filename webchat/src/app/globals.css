@@ -40,4 +40,15 @@ textarea {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+
+html, body {
+  height: 100svh;
+  width: 100vw;
+  overflow: hidden;
+  position: fixed;
+  overscroll-behavior: none;
+}
 

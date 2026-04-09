@@ -55,7 +55,7 @@ export function ChatArea({ messages, isRecording, isTranscribing, isThinking, on
   return (
     <div className="flex-1 flex flex-col h-full bg-white relative w-full">
       {/* Mobile Header */}
-      <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 z-10">
+      <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 z-10 shrink-0">
         <button 
           onClick={onToggleSidebar}
           className="p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
@@ -137,7 +137,7 @@ export function ChatArea({ messages, isRecording, isTranscribing, isThinking, on
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="p-4 bg-white border-t border-slate-200">
+      <div className="p-4 bg-white border-t border-slate-200 shrink-0 pb-safe">
         <div className="max-w-4xl mx-auto flex items-start gap-3 px-2">
           <form className="flex-1 relative" onSubmit={handleSubmit}>
             <textarea

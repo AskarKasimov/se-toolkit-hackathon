@@ -199,7 +199,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex h-screen bg-slate-100 overflow-hidden font-sans text-slate-900">
+    <main className="flex h-[100svh] bg-slate-100 overflow-hidden font-sans text-slate-900">
       <Sidebar
         sessions={sessions}
         activeSessionId={activeSessionId}
