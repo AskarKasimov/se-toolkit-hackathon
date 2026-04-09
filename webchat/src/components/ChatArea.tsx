@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Mic, Square, Loader2, User } from 'lucide-react';
+import { Send, Mic, Square, Loader2, User, Menu } from 'lucide-react';
 import { Message } from '../lib/types';
 import ReactMarkdown from 'react-markdown';
 
@@ -19,11 +19,26 @@ interface ChatAreaProps {
   onSendMessage: (content: string, isVoice: boolean) => void;
   onStartRecording: () => void;
   onStopRecording: () => void;
+  onToggleSidebar: () => void;
 }
 
-export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onStartRecording, onStopRecording }: ChatAreaProps) {
+export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onStartRecording, onStopRecording, onToggleSidebar }: ChatAreaProps) {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const adjustHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = '56px';
+      const scrollHeight = textarea.scrollHeight;
+      textarea.style.height = scrollHeight > 56 ? `${scrollHeight}px` : '56px';
+    }
+  };
+
+  useEffect(() => {
+    adjustHeight();
+  }, [input]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -32,12 +47,27 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isRecording) return;
-    onSendMessage(input, false);
+    onSendMessage(input.trim(), false);
     setInput('');
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-white relative">
+    <div className="flex-1 flex flex-col h-full bg-white relative w-full">
+      {/* Mobile Header */}
+      <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 z-10">
+        <button 
+          onClick={onToggleSidebar}
+          className="p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
+        >
+          <Menu size={24} />
+        </button>
+        <span className="font-semibold text-slate-800 text-lg flex items-center gap-2">
+          <OrthodoxCross className="w-5 h-5 text-indigo-600" />
+          Собеседник
+        </span>
+        <div className="w-10"></div> {/* Placeholder for flex balance */}
+      </div>
+
       <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6">
         {messages.length === 0 ? (
           <div className="h-full flex items-center justify-center flex-col text-center px-4">
@@ -92,13 +122,15 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
       </div>
 
       <div className="p-4 bg-white border-t border-slate-200">
-        <div className="max-w-4xl mx-auto flex items-end gap-3 px-2">
+        <div className="max-w-4xl mx-auto flex items-start gap-3 px-2">
           <form className="flex-1 relative" onSubmit={handleSubmit}>
             <textarea
+              ref={textareaRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Напишите сообщение..."
-              className="w-full bg-slate-50 border border-slate-300 rounded-2xl px-5 flex items-center py-4 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none h-14 min-h-[56px] max-h-32 shadow-inner pr-14 transition-all"
+              className="block w-full bg-slate-50 border border-slate-300 rounded-[24px] pl-5 pr-[60px] py-4 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none min-h-[56px] max-h-32 transition-colors leading-relaxed"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
@@ -110,7 +142,7 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
             <button
               type="submit"
               disabled={!input.trim() || isRecording || isLoading}
-              className="absolute right-2 bottom-2 p-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:bg-slate-300 transition-colors shadow-sm"
+              className="absolute right-[10px] bottom-[11px] p-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:bg-slate-300 transition-colors shadow-sm flex items-center justify-center h-[34px] w-[34px]"
               aria-label="Send message"
             >
               <Send size={18} />
@@ -119,7 +151,7 @@ export function ChatArea({ messages, isRecording, isLoading, onSendMessage, onSt
 
           <button
             onClick={isRecording ? onStopRecording : onStartRecording}
-            className={`p-4 rounded-2xl flex items-center justify-center transition-all ${
+            className={`h-[56px] w-[56px] rounded-2xl flex items-center justify-center transition-all flex-shrink-0 ${
               isRecording
                 ? 'bg-red-500 text-white animate-pulse shadow-lg shadow-red-500/30'
                 : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border border-indigo-200'

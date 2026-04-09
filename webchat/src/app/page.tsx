@@ -11,6 +11,7 @@ export default function Home() {
   const [isRecording, setIsRecording] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem('orthodox-chat-sessions');
@@ -45,10 +46,12 @@ export default function Home() {
 
   const handleNewChat = () => {
     setActiveSessionId(null);
+    setIsSidebarOpen(false);
   };
 
   const handleSelectSession = (id: string) => {
     setActiveSessionId(id);
+    setIsSidebarOpen(false);
   };
 
   const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -171,7 +174,12 @@ export default function Home() {
         activeSessionId={activeSessionId}
         onSelectSession={handleSelectSession}
         onNewChat={handleNewChat}
-        onScenarioClick={(scenario) => handleSendMessage(scenario, false)}
+        onScenarioClick={(scenario) => {
+          handleSendMessage(scenario, false);
+          setIsSidebarOpen(false);
+        }}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
       <ChatArea
         messages={activeSession.messages || []}
@@ -180,6 +188,7 @@ export default function Home() {
         onSendMessage={handleSendMessage}
         onStartRecording={handleStartRecording}
         onStopRecording={handleStopRecording}
+        onToggleSidebar={() => setIsSidebarOpen(true)}
       />
     </main>
   );

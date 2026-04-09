@@ -25,3 +25,19 @@ body {
     text-wrap: balance;
   }
 }
+
+textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+
+textarea::-webkit-scrollbar {
+  display: none;
+}
+textarea {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
