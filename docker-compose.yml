@@ -6,6 +6,8 @@ services:
     container_name: webchat-app
     ports:
       - "3000:3000"
+    environment:
+      - STT_API_URL=http://whisper-stt:8000/v1/audio/transcriptions
     env_file:
       - .env.secret
     restart: unless-stopped
@@ -18,10 +20,16 @@ services:
     ports:
       - "127.0.0.1:8000:8000"
     environment:
-      - WHISPER_MODEL=small 
+      - WHISPER_MODEL=Systran/faster-whisper-small
+      - HF_HOME=/models
+    volumes:
+      - whisper-models:/models
     restart: unless-stopped
     networks:
       - lms-network
+
+volumes:
+  whisper-models:
 
 networks:
   lms-network:

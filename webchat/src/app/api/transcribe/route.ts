@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     
     const formDataForSTT = new FormData();
     formDataForSTT.append('file', file);
-    formDataForSTT.append('model', 'small'); 
+    formDataForSTT.append('model', 'Systran/faster-whisper-small'); 
 
     const response = await fetch(sttUrl, {
       method: "POST",
