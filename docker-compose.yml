@@ -12,5 +12,7 @@ services:
     networks:
       - lms-network
 
-# if you have the qwen-code-api running in another compose, 
-# you might need to map them to the same network here
+networks:
+  lms-network:
+    name: lms-network
+    attachable: true
