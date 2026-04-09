@@ -12,6 +12,17 @@ services:
     networks:
       - lms-network
 
+  whisper:
+    image: ghcr.io/speaches-ai/speaches:latest-cpu
+    container_name: whisper-stt
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      - WHISPER_MODEL=small 
+    restart: unless-stopped
+    networks:
+      - lms-network
+
 networks:
   lms-network:
     name: lms-network

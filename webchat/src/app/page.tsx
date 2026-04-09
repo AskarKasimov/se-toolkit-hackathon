@@ -141,14 +141,41 @@ export default function Home() {
         }
       };
 
-      mediaRecorder.onstop = () => {
+      mediaRecorder.onstop = async () => {
         // Stop all tracks to release the microphone completely
         stream.getTracks().forEach(track => track.stop());
-        
-        // Mocking STT response for now
-        const transcribedText = "Я чувствую беспокойство. Как мне найти мир в душе?";
-        handleSendMessage(transcribedText, true);
         setIsRecording(false);
+
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        
+        setIsLoading(true);
+        try {
+          const formData = new FormData();
+          formData.append('file', audioBlob, 'voice-message.webm');
+
+          const sttResponse = await fetch('/api/transcribe', {
+            method: 'POST',
+            body: formData
+          });
+
+          if (!sttResponse.ok) {
+            throw new Error(`STT failed: ${sttResponse.statusText}`);
+          }
+
+          const sttData = await sttResponse.json();
+          const transcribedText = sttData.text;
+
+          if (transcribedText && transcribedText.trim()) {
+            handleSendMessage(transcribedText, true);
+          } else {
+            console.error('Empty transcription result.');
+          }
+        } catch (error) {
+          console.error('STT error:', error);
+          handleSendMessage("Извините, не удалось распознать голос. Попробуйте еще раз или напишите текстом.", true);
+        } finally {
+          setIsLoading(false);
+        }
       };
 
       mediaRecorder.start();
