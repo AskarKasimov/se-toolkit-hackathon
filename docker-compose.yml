@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  webchat:
+    build: ./webchat
+    container_name: webchat-app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.secret
+    restart: unless-stopped
+    networks:
+      - lms-network
+
+# if you have the qwen-code-api running in another compose, 
+# you might need to map them to the same network here
