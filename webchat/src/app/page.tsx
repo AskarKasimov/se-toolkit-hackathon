@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sidebar } from '@/components/Sidebar';
 import { ChatArea } from '@/components/ChatArea';
 import { ChatSession, Message } from '@/lib/types';
@@ -10,7 +10,26 @@ export default function Home() {
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('orthodox-chat-sessions');
+    if (stored) {
+      try {
+        setSessions(JSON.parse(stored));
+      } catch (e) {
+        console.error("Failed to parse stored sessions", e);
+      }
+    }
+    setIsLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem('orthodox-chat-sessions', JSON.stringify(sessions));
+    }
+  }, [sessions, isLoaded]);
+
   // MediaRecorder refs to hold audio data
   const mediaRecorderRef = React.useRef<MediaRecorder | null>(null);
   const audioChunksRef = React.useRef<Blob[]>([]);
@@ -152,6 +171,7 @@ export default function Home() {
         activeSessionId={activeSessionId}
         onSelectSession={handleSelectSession}
         onNewChat={handleNewChat}
+        onScenarioClick={(scenario) => handleSendMessage(scenario, false)}
       />
       <ChatArea
         messages={activeSession.messages || []}
