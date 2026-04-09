@@ -1,8 +1,8 @@
 FROM node:25-alpine3.22 AS deps
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm install --omit-dev
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
 
 FROM node:25-alpine3.22 AS builder
@@ -11,7 +11,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN npm run build
+RUN yarn build
 
 
 FROM node:25-alpine3.22 AS runner
