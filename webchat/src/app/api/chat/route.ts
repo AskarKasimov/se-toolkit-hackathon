@@ -38,7 +38,7 @@ export async function POST(req: Request) {
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "gpt-4-turbo", // placeholder model
+        model: "coder-model",
         messages: [
           {
             role: "system",
