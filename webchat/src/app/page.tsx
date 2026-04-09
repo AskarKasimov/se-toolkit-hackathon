@@ -78,11 +78,14 @@ export default function Home() {
       setSessions((prev) => [sessionBase, ...prev]);
       setActiveSessionId(sessionBase.id);
     } else {
+      sessionBase = {
+        ...sessionBase,
+        preview: content.substring(0, 50),
+        messages: [...sessionBase.messages, newMessage]
+      };
       setSessions((prev) =>
         prev.map((s) =>
-          s.id === sessionBase.id
-            ? { ...s, preview: content.substring(0, 50), messages: [...s.messages, newMessage] }
-            : s
+          s.id === sessionBase.id ? sessionBase : s
         )
       );
     }
